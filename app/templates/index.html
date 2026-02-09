@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if mode == 'add' %}Добавить запись{% else %}Редактировать запись{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>
+        {% if mode == 'add' %}➕ Добавить новую запись{% else %}✏️ Редактировать запись "{{ record.name }}"{% endif %}
+    </h2>
+</div>
+
+<div class="card">
+    <form method="POST" action="{% if mode == 'add' %}/add{% else %}/edit/{{ record.id }}{% endif %}">
+        <div class="form-group">
+            <label for="name">Название *</label>
+            <input type="text" id="name" name="name" value="{{ record.name if record else '' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="value">Значение *</label>
+            <input type="number" id="value" name="value" step="0.01" value="{{ record.value if record else '' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Категория *</label>
+            <input type="text" id="category" name="category" value="{{ record.category if record else '' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Описание</label>
+            <input type="text" id="description" name="description" value="{{ record.description if record else '' }}">
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-success">
+                {% if mode == 'add' %}✅ Добавить запись{% else %}💾 Сохранить изменения{% endif %}
+            </button>
+            <a href="/" class="btn btn-outline">← Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

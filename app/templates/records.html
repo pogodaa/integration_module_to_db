@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Записи - Модуль интеграции с БД{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>📋 Все записи в базе данных</h2>
+    <p class="subtitle">Всего записей: {{ total }}</p>
+</div>
+
+<!-- Поиск -->
+<form method="GET" action="/search" class="search-form">
+    <input type="text" name="q" placeholder="Поиск по названию, категории или описанию..." value="{{ search_query or '' }}">
+    <button type="submit" class="btn btn-primary">🔍 Найти</button>
+    {% if search_query %}
+    <a href="/" class="btn btn-outline">Показать все</a>
+    {% endif %}
+</form>
+
+<!-- Таблица записей -->
+{% if records %}
+<div class="card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Значение</th>
+                <th>Категория</th>
+                <th>Описание</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.id }}</td>
+                <td>{{ record.name }}</td>
+                <td>{{ "%.2f"|format(record.value) }}</td>
+                <td>{{ record.category }}</td>
+                <td>{{ record.description or '-' }}</td>
+                <td>
+                    <a href="/edit/{{ record.id }}" class="btn-sm btn-secondary">✏️ Изменить</a>
+                    <a href="/delete/{{ record.id }}" class="btn-sm btn-danger" onclick="return confirm('Удалить запись?')">🗑️ Удалить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <p style="text-align: center; color: #666;">Нет записей в базе данных</p>
+</div>
+{% endif %}
+{% endblock %}
